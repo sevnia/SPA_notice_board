@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>게시글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #0056b3;
+        }
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        header .logo a {
+            text-decoration: none;
+            color: white;
+        }
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        header nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            padding-bottom: 70px;
+            background-color: #fff;
+            border-radius: 8px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        input, textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: none;
+        }
+        button[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 30%;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            box-sizing: border-box;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        footer .footer-content {
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        footer .footer-content .left {
+            font-size: 14px;
+        }
+        footer .footer-content .right {
+            font-size: 14px;
+        }
+        footer .footer-content .right a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer .footer-content .right a:hover {
+            text-decoration: underline;
+        }
+        footer .footer-bottom {
+            font-size: 12px;
+            margin-top: 10px;
+        }
+		@media (max-width: 768px) {
+			header nav a {
+				font-size: 14px;
+			}
+			header .logo {
+				font-size: 20px;
+			}
+		}
+        @media screen and (max-width:1000px) {
+            footer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" title="메인 페이지 바로가기"><a href="index.html">MY BPS</a></div>
+        <nav>
+            <a href="write.html">게시글 작성</a>
+            <a href="view.html" id="view-link">게시글 목록 보기</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <form id="postForm" autocomplete="off">
+            <input type="text" id="postTitle" name="postTitle" placeholder="제목을 입력하세요..." required>
+            <textarea id="postContent" name="postContent" rows="10" placeholder="게시글을 입력하세요..." required></textarea>
+            <button type="submit">글 작성하기</button>
+        </form>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="left"><p>&copy; 2024 My Company. All rights reserved.</p></div>
+            <div class="right">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('postForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const postTitle = document.getElementById('postTitle').value;
+            const postContent = document.getElementById('postContent').value;
+            const timestamp = new Date().toLocaleString();
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (!loggedInUser) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+
+            if (postTitle && postContent) {
+                let posts = JSON.parse(localStorage.getItem('posts')) || [];
+                posts.push({ title: postTitle, content: postContent, timestamp: timestamp, author: loggedInUser });
+                localStorage.setItem('posts', JSON.stringify(posts));
+                alert('게시글이 저장되었습니다!');
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postContent').value = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>게시글 상세 보기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #0056b3;
+        }
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        header .logo a {
+            text-decoration: none;
+            color: white;
+        }
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        header nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+			padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            font-size: 28px;
+        }
+        .post-df {
+            width: 75%;
+            display: flow-root;
+            margin-top: -20px;
+        }
+        .recommend-section {
+            margin-top: 20px;
+        }
+        #recommend-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        #recommend-button:hover {
+            background-color: #0056b3;
+        }
+        #recommend-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #recommend-count {
+            margin-left: 15px;
+            font-size: 16px;
+        }
+        .comments {
+            margin-top: 10px;
+        }
+        .comments h3 {
+            margin-top: 0;
+        }
+        .comments ul {
+            list-style: none;
+            padding: 0;
+        }
+        .comments li {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            position: relative;
+        }
+        .comments li p {
+            width: 75%; /* 댓글의 너비를 줄임 */
+            margin: 0;
+            word-wrap: break-word; /* 긴 댓글이 줄 바꿈되도록 함 */
+        }
+        .comments li button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .comments li button:hover {
+            background-color: #c82333;
+        }
+        .comments form {
+            margin-top: 20px;
+        }
+        .comments textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: none;
+        }
+        textarea:focus {
+            outline: none;
+        }
+        .comments button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .comments button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .pagination button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .pagination .page-info {
+            font-size: 16px;
+            color: #333;
+        }
+        .pagination .jump-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .pagination .jump-button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 157.5px;
+        }
+        footer .footer-content {
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        footer .footer-content .left {
+            font-size: 14px;
+        }
+        footer .footer-content .right {
+            font-size: 14px;
+        }
+        footer .footer-content .right a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer .footer-content .right a:hover {
+            text-decoration: underline;
+        }
+        footer .footer-bottom {
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" title="메인 페이지 바로가기"><a href="index.html">MY BPS</a></div>
+        <nav>
+            <a href="write.html">게시글 작성</a>
+            <a href="view.html" id="view-link">게시글 목록 보기</a>
+            <a href="contact.html">문의하기</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="postDisplay"></div>
+        <div class="recommend-section">
+            <button id="recommend-button">추천</button>
+            <span id="recommend-count">추천 수: 0</span>
+        </div>
+        <div class="comments">
+            <h3>댓글</h3>
+            <form id="commentForm">
+                <textarea id="commentContent" placeholder="댓글을 입력하세요..." required></textarea>
+                <button type="submit">댓글 작성</button>
+            </form>
+            <ul id="commentList"></ul>
+            <div class="pagination">
+                <button id="prevPage" disabled>이전</button>
+                <button id="firstPage" class="jump-button" disabled>처음</button>
+                <span id="pageInfo" class="page-info"></span>
+                <button id="lastPage" class="jump-button" disabled>마지막</button>
+                <button id="nextPage" disabled>다음</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="left"><p>&copy; 2024 My Company. All rights reserved.</p></div>
+            <div class="right">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = parseInt(urlParams.get('id'), 10);
+        const commentsPerPage = 7; // 페이지당 댓글 수
+        let currentPage = 1;
+        let posts = [];
+        let comments = [];
+        let recommendations = {}; // 추천 수 저장
+        let userRecommendations = {}; // 사용자 추천 기록 저장
+
+        function loadPosts() {
+            const storedPosts = localStorage.getItem('posts');
+            if (storedPosts) {
+                posts = JSON.parse(storedPosts);
+            }
+        }
+
+        function loadComments() {
+            const storedComments = localStorage.getItem('comments');
+            if (storedComments) {
+                comments = JSON.parse(storedComments);
+            }
+        }
+
+        function loadRecommendations() {
+            const storedRecommendations = localStorage.getItem('recommendations');
+            if (storedRecommendations) {
+                recommendations = JSON.parse(storedRecommendations);
+            }
+        }
+
+        function loadUserRecommendations() {
+            const storedUserRecommendations = localStorage.getItem('userRecommendations');
+            if (storedUserRecommendations) {
+                userRecommendations = JSON.parse(storedUserRecommendations);
+            }
+        }
+
+        function saveComments() {
+            localStorage.setItem('comments', JSON.stringify(comments));
+        }
+
+        function saveRecommendations() {
+            localStorage.setItem('recommendations', JSON.stringify(recommendations));
+        }
+
+        function saveUserRecommendations() {
+            localStorage.setItem('userRecommendations', JSON.stringify(userRecommendations));
+        }
+
+        function displayPost() {
+            const postDisplay = document.getElementById('postDisplay');
+            const post = posts[postId];
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (post) {
+                postDisplay.innerHTML = `
+                    <h2>${post.title}</h2>
+                    <div class="post-df"><p>작성자: ${loggedInUser}<br>작성 시간 : ${post.timestamp}</p></div>
+                    <p>${post.content}</p><hr>
+                `;
+            } else {
+                postDisplay.innerHTML = '<p>게시글을 찾을 수 없습니다.</p>';
+            }
+        }
+
+        function displayRecommendations() {
+            const recommendCount = document.getElementById('recommend-count');
+            const recommendationCount = recommendations[postId] || 0;
+            recommendCount.textContent = `추천 수: ${recommendationCount}`;
+        }
+
+        function updateRecommendButton() {
+            const recommendButton = document.getElementById('recommend-button');
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (!loggedInUser) {
+                recommendButton.disabled = true;
+                return;
+            }
+
+            if (userRecommendations[loggedInUser] && userRecommendations[loggedInUser].includes(postId)) {
+                recommendButton.disabled = true;
+            } else {
+                recommendButton.disabled = false;
+            }
+        }
+
+        function handleRecommendation() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (!loggedInUser) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+
+            if (!userRecommendations[loggedInUser]) {
+                userRecommendations[loggedInUser] = [];
+            }
+
+            if (userRecommendations[loggedInUser].includes(postId)) {
+                alert('이미 추천한 게시글입니다.');
+                return;
+            }
+
+            if (!recommendations[postId]) {
+                recommendations[postId] = 0;
+            }
+            recommendations[postId]++;
+            userRecommendations[loggedInUser].push(postId);
+            saveRecommendations();
+            saveUserRecommendations();
+            displayRecommendations();
+            updateRecommendButton();
+        }
+
+        function displayComments() {
+            const commentList = document.getElementById('commentList');
+            const pageInfo = document.getElementById('pageInfo');
+            const postComments = (comments[postId] || []).slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // 최신 댓글이 상단에 오도록 정렬
+            const totalPages = Math.ceil(postComments.length / commentsPerPage);
+            const startIndex = (currentPage - 1) * commentsPerPage;
+            const endIndex = startIndex + commentsPerPage;
+            const paginatedComments = postComments.slice(startIndex, endIndex);
+
+            commentList.innerHTML = paginatedComments.map((comment, index) => `
+                <li>
+                    <span>작성 시간: ${comment.timestamp}</span><br><br>
+                    <p>${comment.text}</p>
+                    <button onclick="deleteComment(${startIndex + index})">삭제</button>
+                </li>
+            `).join('') || '<li>댓글이 없습니다.</li>';
+
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+            document.getElementById('firstPage').disabled = currentPage === 1;
+            document.getElementById('lastPage').disabled = currentPage === totalPages;
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        function handleCommentSubmit(event) {
+            event.preventDefault();
+            const commentContent = document.getElementById('commentContent').value;
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (!loggedInUser) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+
+            if (commentContent) {
+                const timestamp = new Date().toLocaleString();
+                if (!comments[postId]) {
+                    comments[postId] = [];
+                }
+                comments[postId].push({ text: commentContent, timestamp });
+                saveComments();
+                document.getElementById('commentContent').value = '';
+                displayComments();
+            }
+        }
+
+        function deleteComment(index) {
+            if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+                comments[postId].splice(index, 1);
+                saveComments();
+                displayComments();
+            }
+        }
+
+        document.getElementById('recommend-button').addEventListener('click', handleRecommendation);
+
+        document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayComments();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil((comments[postId] || []).length / commentsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayComments();
+            }
+        });
+
+        document.getElementById('firstPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage = 1;
+                displayComments();
+            }
+        });
+
+        document.getElementById('lastPage').addEventListener('click', () => {
+            const totalPages = Math.ceil((comments[postId] || []).length / commentsPerPage);
+            if (currentPage < totalPages) {
+                currentPage = totalPages;
+                displayComments();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPosts();
+            loadComments();
+            loadRecommendations();
+            loadUserRecommendations();
+            displayPost();
+            displayRecommendations();
+            displayComments();
+            updateRecommendButton();
+        });
+    </script>
+</body>
+</html>
